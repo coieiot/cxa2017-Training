@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+      <script src="http://code.highcharts.com/highcharts.js"></script>
+      <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+      <script type="text/javascript">
+
+        var a = [];
+
+        $.ajax({
+          url: "http://sg2017-sta.sensorup.com/v1.0/Datastreams(62792)/Observations?$select=result,phenomenonTime&$orderby=phenomenonTime desc&$top=100"
+        }).then(function(data) {
+
+          for (var i = 0; i < data.value.length; i++) {
+            var b = [];
+            b[0] = Date.parse(data.value[i].phenomenonTime);
+            b[1] = parseInt(data.value[i].result);
+            a.push(b);
+          }
+
+          $(function() {
+
+            $('#container').highcharts({
+              chart: {
+                type: 'line'
+              },
+              title: {
+                text: 'SensorUp HQ Office Temperature'
+              },
+              subtitle: {
+                text: 'Source: Arduino #1'
+              },
+              xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                  month: '%e. %b',
+                  year: '%b'
+                },
+                title: {
+                  text: 'Date'
+                }
+              },
+              yAxis: {
+                title: {
+                  text: 'Air Temperature - degree C'
+                }
+              },
+              plotOptions: {
+                line: {
+                  dataLabels: {
+                    enabled: false
+                  },
+                  enableMouseTracking: true
+                }
+              },
+              series: [{
+                name: 'Air Temperature - degree C',
+                data: a
+              }]
+            });
+          });
+          
+        });
+
+      </script> 
+
+    </head>
+
+
+    <body>
+
+      <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+    </body>
+
+
+</html>
