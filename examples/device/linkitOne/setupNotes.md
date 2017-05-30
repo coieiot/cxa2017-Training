@@ -17,14 +17,3 @@
 	
 
 
-
-LWiFi
-C:\Users\kinoFocus\AppData\Local\Arduino15\packages\LinkIt\hardware\arm\1.1.23\libraries
-
-pubsubclient-2.6
-http://downloads.arduino.cc/libraries/github.com/knolleary/PubSubClient-2.6.0.zip
-
-
-
-
-
