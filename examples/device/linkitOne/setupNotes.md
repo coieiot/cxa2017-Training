@@ -12,8 +12,6 @@
 - The very last row is "Linkit ONE by Seeed Studio and MediaTek Labs". Click on that and choose 1.1.23 for version and click Install.
 - Copy and extract the followings in Desktop/arduino-1.8.2/libraries
 	1. [PubSubClient-2.6.0.zip](http://downloads.arduino.cc/libraries/github.com/knolleary/PubSubClient-2.6.0.zip)
-	2. [SensorThings.zip](https://github.com/coieiot/cxa2017-Training/blob/master/examples/device/linkitOne/SensorThings.zip)
-
-	
-
-
+	2. [Barometer_Sensor.zip](https://github.com/Seeed-Studio/Grove_Barometer_Sensor/archive/master.zip)
+	3. [Humidity_Temperature_Sensor_pro.zip](https://github.com/SeeedDocument/Grove-Temperature_and_Humidity_Sensor_Pro/raw/master/res/Humidity_Temperature_Sensor_pro.zip)
+	4. [SensorThings.zip](https://github.com/coieiot/cxa2017-Training/blob/master/examples/device/linkitOne/SensorThings.zip)
