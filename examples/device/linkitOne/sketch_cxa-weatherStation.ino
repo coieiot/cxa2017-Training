@@ -12,16 +12,15 @@ DHT dht(DHTPIN, DHTTYPE);
 Barometer myBarometer;
 
 // *** Wifi Client
-#define WIFI_AP       "AP_SSID"      	// to replace with your AP SSID 
-#define WIFI_PASSWORD "PassWord"        // to replace with your AP Security Key
+#define WIFI_AP       "AP_SSID"        // to replace with your AP SSID 
+#define WIFI_PASSWORD "PassWord"       // to replace with your AP Security Key
 #define WIFI_AUTH LWIFI_WPA   // choose from LWIFI_OPEN, LWIFI_WPA, or LWIFI_WEP.
 LWiFiClient client;
 
 // *** STA Platform
-/*
-#define REST_SERVER "scratchpad.sensorup.com"   //port: 80
-#define REST_SERVER "sg2017-sta.sensorup.com"   //port: 80
-*/
+
+//#define REST_SERVER "scratchpad.sensorup.com"   //port: 80
+// no authentication required for scratchpad
 
 #define REST_SERVER "cxa2017-ws1.sensorup.com"   //port: 80
 #define AUTH_ENCODED "Authorization: Basic bWFpbjpmMDk2MTFlYy02MGY2LTUyM2ItOGU3NC05NjYwMTkxMjU3N2I=" //cxa2017-ws1 encoded to Base64
@@ -29,10 +28,10 @@ LWiFiClient client;
 //#define REST_SERVER "cxa2017-ws2.sensorup.com"    //port: 80
 //#define AUTH_ENCODED "Authorization: Basic bWFpbjo3YjM3YWVlNy01ZTc2LTVkODMtYThlYy01MTNmMzZiNTU1ZGU=" //cxa2017-ws2 encoded to Base64
 
-/*
-#define MQTT_BROKER "scratchpad.sensorup.com"   //port: 1883
-#define MQTT_BROKER "sg2017-sta.sensorup.com"   //port: 1883
-*/
+
+//#define MQTT_BROKER "scratchpad.sensorup.com"   //port: 1883
+//#define AUTH_USER   ""  // no authentication required
+//#define AUTH_PASSWD ""  //no authentication required
 
 #define MQTT_BROKER "cxa2017-ws1.sensorup.com"  //port: 1883
 #define AUTH_USER   "main"  //cxa2017-ws1
@@ -42,19 +41,21 @@ LWiFiClient client;
 //#define AUTH_USER   "main"  //cxa2017-ws2
 //#define AUTH_PASSWD "7b37aee7-5e76-5d83-a8ec-513f36b555de"  //cxa2017-ws2
 
-/*
-#define TEMPERATURE_DATASTREAM_ID 47557   //sg2017-sta datastream
-#define HUMIDITY_DATASTREAM_ID    47562   //sg2017-sta datastream
-#define PRESSURE_DATASTREAM_ID    47565   //sg2017-sta datastream
-#define ILLUMINANCE_DATASTREAM_ID 47564   //sg2017-sta datastream
-*/
+//SCRATCHPAD
+//#define TEMPERATURE_DATASTREAM_ID 852741   //scratchpad datastream
+//#define HUMIDITY_DATASTREAM_ID    852752   //scratchpad datastream
+//#define PRESSURE_DATASTREAM_ID    852748   //scratchpad datastream
+//#define ILLUMINANCE_DATASTREAM_ID 852756   //scratchpad datastream
+
+
+//CXA2017-WORKSHOP
 #define TEMPERATURE_DATASTREAM_ID 34   //cxa2017-ws1 & cxa2017-ws2 WS-Sembawang(38); WS-Cashew(42); WS-NYP/SEG(34)
 #define HUMIDITY_DATASTREAM_ID    35   //cxa2017-ws1 & cxa2017-ws2 WS-Sembawang(39); WS-Cashew(43); WS-NYP/SEG(35)
 #define PRESSURE_DATASTREAM_ID    36   //cxa2017-ws1 & cxa2017-ws2 WS-Sembawang(40); WS-Cashew(44); WS-NYP/SEG(36)
 #define ILLUMINANCE_DATASTREAM_ID 37   //cxa2017-ws1 & cxa2017-ws2 WS-Sembawang(41); WS-Cashew(45); WS-NYP/SEG(37)
 
-//#define ILLUMINANCE_DATASTREAM_ID 46    //cxa2017-ws1 & cxa2017-ws2 WS-NYP-datastream(46)
 
+//#define ILLUMINANCE_DATASTREAM_ID 46    //cxa2017-ws1 & cxa2017-ws2 WS-NYP-datastream(46)
 
 float   t1        = 0.0;
 float   t2        = 0.0;
@@ -194,7 +195,6 @@ void mqttReconnect()
       Serial.println("\nConnecting to MQTT broker ...");
 
       // Attempt to connect
-      //isConnected = mqttClient.connect("SEG1234567890", AUTH_USER, AUTH_PASSWD);
       isConnected = mqttClient.connect(mqClientID, AUTH_USER, AUTH_PASSWD);
       if (isConnected) {  
         Serial.println( "[DONE]" );
@@ -218,10 +218,11 @@ void httpPostResult(float value, int datastreamId)
       Serial.println(REST_SERVER);
       
       // Build HTTP POST request
-/*      
-      client.println("POST /OGCSensorThings/v1.0/Datastreams(" + String(datastreamId) + ")/Observations HTTP/1.1");
-      Serial.println("POST /OGCSensorThings/v1.0/Datastreams(" + String(datastreamId) + ")/Observations HTTP/1.1");
-*/
+      
+      //legacy: only for scratchpad
+      //client.println("POST /OGCSensorThings/v1.0/Datastreams(" + String(datastreamId) + ")/Observations HTTP/1.1");
+      //Serial.println("POST /OGCSensorThings/v1.0/Datastreams(" + String(datastreamId) + ")/Observations HTTP/1.1");
+
       client.println("POST /v1.0/Datastreams(" + String(datastreamId) + ")/Observations HTTP/1.1"); 
       Serial.println("POST /v1.0/Datastreams(" + String(datastreamId) + ")/Observations HTTP/1.1");
 
@@ -234,7 +235,7 @@ void httpPostResult(float value, int datastreamId)
       client.println("Content-Type: application/json");
       Serial.println("Content-Type: application/json");
       
-      client.println(AUTH_ENCODED);     //encoded to Base64 format
+      client.println(AUTH_ENCODED);     //encoded to Base64 format *** to be commented for scratchpad
       Serial.println(AUTH_ENCODED); 
       
       client.println("Cache-Control: no-cache");
@@ -269,5 +270,3 @@ void httpPostResult(float value, int datastreamId)
       Serial.println("connection failed");
     }
 }
-
-
