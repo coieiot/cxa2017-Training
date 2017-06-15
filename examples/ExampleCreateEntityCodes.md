@@ -10,10 +10,10 @@ This set of example code in JavaScript/JQuery demonstrates the use of SensorThin
 ### (1) Create a Thing
 
 ``` javascript
-var dataObj = JSON.stringify({
-     "name": "SGWeatherStation1",
-     "description": "SG Weather Station located at Central"
-});
+var dataObj = {
+     name: "SGWeatherStation1",
+     description: "SG Weather Station located at Central"
+};
 
 $.ajax({
      url: "https://cxa2017-ws2.sensorup.com/v1.0/Things",
