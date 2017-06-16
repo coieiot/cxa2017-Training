@@ -12,7 +12,7 @@
         var a = [];
 
         $.ajax({
-          url: "http://sg2017-sta.sensorup.com/v1.0/Datastreams(62792)/Observations?$select=result,phenomenonTime&$orderby=phenomenonTime desc&$top=100"
+          url: "http://cxa2017-ws1.sensorup.com/v1.0/Datastreams(34)/Observations?$select=result,phenomenonTime&$orderby=phenomenonTime desc&$top=100"
         }).then(function(data) {
 
           for (var i = 0; i < data.value.length; i++) {
@@ -29,10 +29,10 @@
                 type: 'line'
               },
               title: {
-                text: 'SensorUp HQ Office Temperature'
+                text: 'NYP Office Temperature'
               },
               subtitle: {
-                text: 'Source: Arduino #1'
+                text: 'Source: LinkIt One'
               },
               xAxis: {
                 type: 'datetime',
