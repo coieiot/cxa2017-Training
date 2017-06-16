@@ -117,7 +117,7 @@
     
         if (chartTemperature) {
           
-          var observationURI = "http://cxa2017-ws1.sensorup.com/v1.0/Datastreams(40)/Observations?$top=1";
+          var observationURI = "http://cxa2017-ws1.sensorup.com/v1.0/Datastreams(34)/Observations?$top=1";
           $.getJSON(observationURI, function(observations) {
             $.each(observations.value, function(i, observation) {
               point = chartTemperature.series[0].points[0];
