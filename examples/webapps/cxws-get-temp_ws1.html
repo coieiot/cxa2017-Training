@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CX Weather Stations</title>
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .section {
+      margin: 20px;
+    }
+    button {
+      padding: 5px 16px;
+      border-radius: 4px;
+    }   
+    button#getTemperature { background-color: #98fb98; }   
+  </style>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  <script type="text/javascript">
+  	
+  	window.onload = function() {
+  		
+
+  		$("#getTemperature").click(function() {
+
+        $("#temperatureResult").html(" ");
+  			var inputName = $("#weatherStationName").val();
+        inputName = inputName.trim();
+
+        if (inputName === "") {          
+          alert("Oops! Please type in weather station name.");
+        } else {
+
+          var urlString = "http://cxa2017-ws1.sensorup.com/v1.0/Things?$filter=name eq '" + inputName + "'";
+
+          $.get(urlString, function(response, status) {
+
+            if (response.value.length===0) {
+              alert("Sorry, no such weather station.")
+            } else {
+
+              var selfLink = response.value[0]["@iot.selfLink"];
+              var urlString1 = selfLink + "/Datastreams";
+
+              $.get(urlString1, function(response, status) {
+
+                var numStreams = response.value.length;
+                var done = false;
+                var count = 0;
+
+                for (var i=0; i<numStreams && !done; i++) {   // search for the first temperature datastream
+
+                  var OBLink = response.value[i]["Observations@iot.navigationLink"];
+                  var OPLink = response.value[i]["ObservedProperty@iot.navigationLink"];
+
+                  $.get(OPLink, function(response, status) {
+
+                    count++;
+
+                    if (response.name === "air_temperature") {
+
+                      $.get(OBLink, function(response, status) {
+                        
+                        if (response["@iot.count"] != 0) {
+                          $("#temperatureResult").html(response.value[0].result + " degC");   // assuming the first observation is the latest measurement
+                        } else {
+                          alert("Sorry, there is no temperature reading available.");
+                        }                       
+
+                      });
+
+                      done = true;
+                      
+                    } 
+
+                    if (count==numStreams && !done) {
+                      alert("Sorry, there is no temperature data stream in this weather station.");
+                    }
+
+
+                  });
+                      
+                } // for
+
+              });
+
+            }  // if    
+              
+          }); 
+
+        }  // if		
+
+  		});
+
+  	};
+	
+
+  </script>
+ 
+</head>
+
+<body>
+	
+	<h1>CX Weather Stations</h1>
+
+	<hr/>
+  
+  	<div class="section">
+    	<h2>Get the latest temperature</h2>
+    	Enter weather station name: <input type="text" id="weatherStationName" value="WS-NYP/SEG" /> 
+      <button id="getTemperature">Get Temperature</button>
+      <span id="temperatureResult"></span>
+  	</div>
+
+  <hr/>
+
+</body>
+
+
+</html>
